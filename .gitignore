@@ -1,3 +1,11 @@
+# VS build files
+**/*.pdb
+**/*.idb
+**/*.tlog
+**/*.lastbuildstate
+**/*.unsuccessfulbuild
+**/*.lastcodeanalysissucceeded
+
 # VS user specific files
 *.suo
 *.user.props

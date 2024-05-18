@@ -1,0 +1,23 @@
+# VS user specific files
+*.suo
+*.user.props
+*.user
+*.sln.docstates
+
+# VS cache directory
+*.vs/
+
+# Visual C++ cache files
+**/ipch/
+**/*.aps
+**/*.APS
+**/*.ncb
+**/*.opensdf
+**/*.sdf
+**/*.cachefile
+
+
+# Visual Studio profiler
+**/*.psess
+**/*.vsp
+**/*.vspx

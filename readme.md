@@ -76,5 +76,3 @@ Cheers,
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
   
-  
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/monstrobishi/xeffects/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

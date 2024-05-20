@@ -98,33 +98,37 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
 		sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));	
 
-		// Create screen quad shader callback.
-		ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
+		// Create screen quad shader callbacks.
 
 		// Light modulate.
+		ScreenQuadCB* modulateCB = new ScreenQuadCB(this, true);
 		LightModulate = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(LIGHT_MODULATE_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShader(LIGHT_MODULATE_P[shaderExt]).c_str(), "pixelMain", pixelProfile, modulateCB);
+		modulateCB->drop();
 
 		// Simple present.
+		ScreenQuadCB* presentCB = new ScreenQuadCB(this, true);
 		Simple = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(SIMPLE_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB,
+			sPP.ppShader(SIMPLE_P[shaderExt]).c_str(), "pixelMain", pixelProfile, presentCB,
 			video::EMT_TRANSPARENT_ADD_COLOR);
+		presentCB->drop();
 
 		// VSM blur.
+		ScreenQuadCB* blurHCB = new ScreenQuadCB(this, true);
 		VSMBlurH = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(VSM_BLUR_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShader(VSM_BLUR_P[shaderExt]).c_str(), "pixelMain", pixelProfile, blurHCB);
+		blurHCB->drop();
 
 		sPP.addShaderDefine("VERTICAL_VSM_BLUR");
 
+		ScreenQuadCB* blurVCB = new ScreenQuadCB(this, true);
 		VSMBlurV = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(VSM_BLUR_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB);
-		
-		// Drop the screen quad callback.
-		SQCB->drop();
+			sPP.ppShader(VSM_BLUR_P[shaderExt]).c_str(), "pixelMain", pixelProfile, blurVCB);
+		blurVCB->drop();
 	}
 	else
 	{

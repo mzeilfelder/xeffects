@@ -119,7 +119,9 @@ int main()
 	effect->setClearColour(SColor(255, 250, 100, 0));
 
 	ILightSceneNode* light = smgr->addLightSceneNode();
-	light->addAnimator(smgr->createFlyCircleAnimator(vector3df(5, 4.5f, 5), 5));
+	ISceneNodeAnimator* ani = smgr->createFlyCircleAnimator(vector3df(5, 4.5f, 5), 5);
+	light->addAnimator(ani);
+	ani->drop();
 
 	core::stringc shaderExt = (driver->getDriverType() == EDT_DIRECT3D9) ? ".hlsl" : ".glsl";
 

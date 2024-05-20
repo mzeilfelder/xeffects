@@ -155,9 +155,13 @@ int main()
 	// Add two light scene nodes. We will not actually use them for lighting in this
 	// demo, but add animators to them instead and make the shadow lights follow them.
 	ILightSceneNode* light = smgr->addLightSceneNode();
-	light->addAnimator(smgr->createFlyCircleAnimator(vector3df(5, 20, 5), 38));
+	ISceneNodeAnimator* ani = smgr->createFlyCircleAnimator(vector3df(5, 20, 5), 38);
+	light->addAnimator(ani);
+	ani->drop();
 	ILightSceneNode* light2 = smgr->addLightSceneNode();
-	light2->addAnimator(smgr->createFlyCircleAnimator(vector3df(5, 20, 5), 38, -0.001f));
+	ani = smgr->createFlyCircleAnimator(vector3df(5, 20, 5), 38, -0.001f);
+	light2->addAnimator(ani);
+	ani->drop();
 
 	// Add some post processing effects, a very subtle bloom here.
 	const stringc shaderExt = (driver->getDriverType() == EDT_DIRECT3D9) ? ".hlsl" : ".glsl";

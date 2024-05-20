@@ -8,26 +8,37 @@ using namespace scene;
 using namespace video;
 using namespace core;
 
-// Helper defines to use faster setVertexShaderConstant functions which got added in Irrlicht 1.9
-// Sadly does not work so far. The problem is that the new functions need to have one callback instance 
-// per shader material (shader constants are always per shader).
+// Helper defines to use Irrlicht 1.9 shader constant functions
+// Sadly can't use the optmized version so far. The problem is that only works 
+// when one has one callback instance per shader material (shader constants are per shader, not per callback).
 // Depth and shadow callback will need some rewrite to make that work (nearly seems to work, but check console errors, especially on OpenGL)
-//#define USE_1_9_SHADER_CONSTANTS
+//#define USE_OPTIMIZED_SHADER_CONSTANTS
+#define USE_1_9_SHADER_CONSTANTS
 #if defined(USE_1_9_SHADER_CONSTANTS) && (IRRLICHT_VERSION_MAJOR > 1 || (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR >=9))
+  #if USE_OPTIMIZED_SHADER_CONSTANTS
 	#define XE_SET_VERTEX_SHADER_CONSTANT(id_var, name, pointer, count) \
 		if ( id_var < -1 ) \
 			id_var = services->getVertexShaderConstantID(name); \
 		services->setVertexShaderConstant(id_var, pointer, count);
+  #else 
+	#define XE_SET_VERTEX_SHADER_CONSTANT(id_var, name, pointer, count) \
+		services->setVertexShaderConstant(services->getVertexShaderConstantID(name), pointer, count);
+  #endif
 #else
 	#define XE_SET_VERTEX_SHADER_CONSTANT(id_var, name, pointer, count) \
 		services->setVertexShaderConstant(name, pointer, count);
 #endif
 
 #if defined(USE_1_9_SHADER_CONSTANTS) && (IRRLICHT_VERSION_MAJOR > 1 || (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR >=9))
+  #if USE_OPTIMIZED_SHADER_CONSTANTS
 	#define XE_SET_PIXEL_SHADER_CONSTANT(id_var, name, pointer, count) \
 	if ( id_var < -1 ) \
 		id_var = services->getPixelShaderConstantID(name); \
 	services->setPixelShaderConstant(id_var, pointer, count);
+  #else 
+	#define XE_SET_PIXEL_SHADER_CONSTANT(id_var, name, pointer, count) \
+		services->setPixelShaderConstant(services->getPixelShaderConstantID(name), pointer, count);
+  #endif
 #else
 	#define XE_SET_PIXEL_SHADER_CONSTANT(id_var, name, pointer, count) \
 		services->setPixelShaderConstant(name, pointer, count);
